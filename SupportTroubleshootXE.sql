@@ -2,14 +2,16 @@
   Script Description: [SupportTroubleshootXE]
 
   This is the new standard SupportTroubleshootXE Extended Event (XE) template. This template is designed to replace 
-  Microsoft's Profile Trace functionality, as Profile Traces are deprecated. This template is designed to be very easy
-  to deploy. 
+     Microsoft's Profile Trace functionality, as Profile Traces are deprecated. This template is designed to be very 
+	easy to deploy. 
 
-  This is a simple template with few options, designed to be deployed by Tier 1 Support Reps. 
+  This is a simple template with few options, designed to be deployed by Tier 1 Support Reps. Each Execution of this 
+     template will create a uniquely named session, to prevent these sessions from overwriting each other if you are
+     investigating multiple issues at once. 
 
   This template will write data to an output file that you can specify below. The XE session will write up to 512 MB of
-  data in a single file. It will create up to five of these files, the session can take up to 2.5 GB of hard drive space.
-  Be aware of this when writing a file to a SQL Server's C:\ drive, so you don't fill the drive and take down the server!
+     data in a single file. It will create up to five of these files, the session can take up to 2.5 GB of hard drive space.
+     Be aware of this when writing a file to a SQL Server's C:\ drive, so you don't fill the drive and take down the server!
 
   To deploy this script, configure these three variables in the User Configuration section below. 
 
