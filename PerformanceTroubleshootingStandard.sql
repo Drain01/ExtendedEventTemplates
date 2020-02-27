@@ -78,6 +78,7 @@ set @OutputType = 'File';
     /* @FileOut
 		    This is required when @OutputType is set to 'File'. Just specify which directory that SQL Server should write the output file to. Note that 
 		    this is from the SQL Server's perspective. Do not end this variable with a '\'.  */
+
 set @FileOut = 'C:\temp'; 
 
     /* Options for Override XE Session
@@ -116,10 +117,10 @@ set @StartSession = 1;
      /* options for @JustCreateDeployScript.
 		     0 - Default. When this is zero, it will just attempt to create the XE session.
 			1 - Instead of creating the XE session it will just return a script that will create 
-			     a session with these settings. */
+			     a session with these settings. Note that this does not create the statement to
+				turn on the XE session, you must do that manually. */
 
 set @JustCreateDeployScript = 0
-
 
 
 /* End User Configuration */
@@ -133,12 +134,13 @@ begin
     if exists(select 1 from sys.server_event_sessions
     where name = 'PerformanceTroubleshootingStandard')
     begin
-	   select 'Extended Event: [PerformanceTroubleshootingStandard] already exists!';
-	   select 'Exiting Script Early.';
+	   print 'Extended Event: [PerformanceTroubleshootingStandard] already exists!';
+	   print 'Exiting Script Early.';
 	   return
     end;
 end;
 
+/* if we are overriding, drop existing session if it exists. */
 if @OverrideXE = 1
 begin
     if exists(select 1 from sys.server_event_sessions
@@ -268,36 +270,36 @@ begin
 		  print 'Make sure to turn the Extended Event off when you are done!'
 	   end;
     
-end try
-begin catch
-    DECLARE @ErrorMessage NVARCHAR(4000);  
-    DECLARE @ErrorSeverity INT;  
-    DECLARE @ErrorState INT;  
+    end try
+    begin catch
+	   DECLARE @ErrorMessage NVARCHAR(4000);  
+	   DECLARE @ErrorSeverity INT;  
+	   DECLARE @ErrorState INT;  
   
-    SELECT   
-        @ErrorMessage = ERROR_MESSAGE(),  
-        @ErrorSeverity = ERROR_SEVERITY(),  
-        @ErrorState = ERROR_STATE();  
+	   SELECT   
+		  @ErrorMessage = ERROR_MESSAGE(),  
+		  @ErrorSeverity = ERROR_SEVERITY(),  
+		  @ErrorState = ERROR_STATE();  
    
-    RAISERROR (@ErrorMessage, -- Message text.  
-               @ErrorSeverity, -- Severity.  
-               @ErrorState -- State.  
-               );  
+	   RAISERROR (@ErrorMessage, -- Message text.  
+			    @ErrorSeverity, -- Severity.  
+			    @ErrorState -- State.  
+			    );  
 
-    print ''
-    print 'If you see a "The system cannot find the path specified" error, then SQL Server likely cannot find the output directory.';
-    print 'It may not exist or the SQL Server cannot access it. Remember that the output file is from the SQL Server''s perspective.';
-    print 'Dropping the XE that was created, review the directory and rerun the script.';
-    print ''
+	   print ''
+	   print 'If you see a "The system cannot find the path specified" error, then SQL Server likely cannot find the output directory.';
+	   print 'It may not exist or the SQL Server cannot access it. Remember that the output file is from the SQL Server''s perspective.';
+	   print 'Dropping the XE that was created, review the directory and rerun the script.';
+	   print ''
 
-    /* If there was an error like a bad File Name, just rerun the script with the correct file location. Drop the session 
-    with the bad file path. */
-    if exists (Select 1 from sys.server_event_sessions where name = 'PerformanceTroubleshootingStandard')
-    begin
-	   set @sql = N' Drop Event Session [PerformanceTroubleshootingStandard] on server';
-	   exec sp_executesql @sql;
-    end;
-end catch;
+	   /* If there was an error like a bad File Name, just rerun the script with the correct file location. Drop the session 
+	   with the bad file path. */
+	   if exists (Select 1 from sys.server_event_sessions where name = 'PerformanceTroubleshootingStandard')
+	   begin
+		  set @sql = N' Drop Event Session [PerformanceTroubleshootingStandard] on server';
+		  exec sp_executesql @sql;
+	   end;
+    end catch;
 end;
 
 if @JustCreateDeployScript = 1
