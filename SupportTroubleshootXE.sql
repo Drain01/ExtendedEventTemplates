@@ -5,6 +5,8 @@
   Microsoft's Profile Trace functionality, as Profile Traces are deprecated. This template is designed to be very easy
   to deploy. 
 
+  This is a simple template with few options, designed to be deployed by Tier 1 Support Reps. 
+
   This template will write data to an output file that you can specify below. The XE session will write up to 512 MB of
   data in a single file. It will create up to five of these files, the session can take up to 2.5 GB of hard drive space.
   Be aware of this when writing a file to a SQL Server's C:\ drive, so you don't fill the drive and take down the server!
