@@ -64,7 +64,7 @@ set @DB = '';
 set @user = '';
 
 /* Enter the output file location. DO NOT end with a \ mark. */
-set @FileOut = N'C:\test'
+set @FileOut = N'C:\temp'
 
 /* End User Configuration */
 /* ----------------------------------------------------------------------------------------------------------------*/
