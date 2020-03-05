@@ -48,9 +48,9 @@
   Date         Name             Label/PTS    Description
   -----------  ---------------  ----------  ----------------------------------------               
   04/03/2019    David Rainey    V 1.0       Initial Release 
-  04/11/2019	 David Rainey    V 1.1       Added rcp_completed and sql_batch_completed
+  04/11/2019	David Rainey    V 1.1       Added rcp_completed and sql_batch_completed
   08/13/2019    David Rainey    V 1.2       Added option for Ring Buffer
-  02/25/2020	 David Rainey    V 1.3       Added filter options for User or Database. 
+  02/25/2020	David Rainey    V 1.3       Added filter options for User or Database. 
 ********************************************************************************************************************/
 
 declare @FileOut Nvarchar(500);
